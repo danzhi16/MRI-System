@@ -1,115 +1,166 @@
-# 🎉 MRI Analysis System - Complete Implementation
+# MRI Analysis System
 
-## 📖 Start Here
+Professional full-stack MRI analysis platform with:
+- Doctor authentication (JWT)
+- Patient management
+- MRI image analysis workflow
+- FastAPI backend with PostgreSQL
+- Flutter frontend
 
-Welcome! This is a complete MRI analysis system with doctor authentication, patient management, and MRI analysis.
+This README is optimized for macOS setup and day-to-day development.
 
-**New to this project?** Start with:
-1. [COMPLETION_SUMMARY.md](COMPLETION_SUMMARY.md) - What's included
-2. [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) - Full system overview
-3. [backend/DOCKER_SETUP.md](backend/docs/DOCKER_SETUP.md) - Start using it
+## Architecture
 
-## 🚀 Quick Start (5 minutes)
+- Backend: FastAPI, SQLAlchemy, PostgreSQL, Docker
+- Frontend: Flutter
+- Data flow: Doctor login -> patient records -> MRI upload -> analysis history
+
+## Repository Structure
+
+```text
+MRI-System/
+├── backend/     # FastAPI API + database + Docker
+├── frontend/    # Flutter client app
+├── README.md
+└── FIXES_SUMMARY.md
+```
+
+## macOS Prerequisites
+
+Install and verify the following before starting:
+
+1. Docker Desktop for Mac
+2. Flutter SDK
+3. Xcode Command Line Tools
+4. Git
+
+Optional (recommended for mobile dev):
+- Android Studio (Android emulator/toolchain)
+- Xcode app (iOS simulator/toolchain)
+
+Quick verification:
 
 ```bash
-# 1. Start Backend (with Docker)
-cd backend
-start-docker.bat          # Windows
-# or: bash start-docker.sh  # Linux/macOS
-# or: docker-compose up --build  # All platforms
+docker --version
+docker-compose --version
+flutter --version
+xcode-select -p
+git --version
+```
 
-# 2. Start Frontend
+## Quick Start (macOS)
+
+### 1) Start backend services
+
+```bash
+cd backend
+bash start-docker.sh
+```
+
+What this does:
+- Pulls and builds Docker images
+- Starts API + PostgreSQL containers
+- Exposes backend at http://localhost:8000
+
+### 2) Start frontend app
+
+Open a new terminal tab/window:
+
+```bash
 cd frontend
 flutter pub get
 flutter run
-
-# 3. Access
-# Backend API: http://localhost:8000/docs
-# Test: Register → Add Patients → Test MRI
 ```
 
-## 🎯 What's Implemented
+### 3) Validate system
 
-### ✅ Complete Account System
-- Doctor registration and login
-- JWT authentication
-- Profile management
-- Secure token storage
+1. Open API docs: http://localhost:8000/docs
+2. Register a doctor account
+3. Add a patient
+4. Run MRI analysis for that patient
 
-### ✅ Patient Management
-- Add patients with details
-- Display in beautiful sidebar cards
-- Color-coded diseases
-- Patient deletion
-- Patient-doctor relationships
+## Common Commands (macOS)
 
-### ✅ MRI Analysis
-- Upload MRI images
-- Get AI predictions
-- Display results
-- Track history
-
-### ✅ Database
-- PostgreSQL in Docker
-- Users table (doctors)
-- Patients table
-- Analysis table
-- Automatic initialization
-
-### ✅ Docker
-- Containerized backend & database
-- One-click startup scripts
-- Data persistence
-- Development hot-reload
-- Production ready
-
-## 📚 Key Documentation
-
-| Document | Purpose |
-|----------|---------|
-| [COMPLETION_SUMMARY.md](COMPLETION_SUMMARY.md) | Overview of everything |
-| [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | Complete system guide |
-| [backend/DOCKER_QUICK_REFERENCE.md](backend/DOCKER_QUICK_REFERENCE.md) | Visual guide (5 min) |
-| [backend/DOCKER_SETUP.md](backend/docs/DOCKER_SETUP.md) | Setup guide |
-| [backend/DOCKER_COMMANDS.md](backend/docs/DOCKER_COMMANDS.md) | Commands reference |
-| [backend/DOCKER_DEPLOYMENT.md](backend/docs/DOCKER_DEPLOYMENT.md) | Deployment guide |
-
-**Total Documentation: 22,500+ words**
-
-## 🐳 Quick Commands
+Run from backend directory:
 
 ```bash
 # Start services
-cd backend
-start-docker.bat  # or bash start-docker.sh
+docker-compose up -d --build
 
-# View logs
+# Check status
+docker-compose ps
+
+# Stream logs
 docker-compose logs -f
 
 # Stop services
 docker-compose down
 
-# Access database
+# Stop and remove volumes (destructive)
+docker-compose down -v
+
+# Access PostgreSQL shell
 docker-compose exec db psql -U postgres -d mri_db
 ```
 
-## 🎯 Next Steps
+## Documentation Index
 
-1. Read [COMPLETION_SUMMARY.md](COMPLETION_SUMMARY.md)
-2. Run `start-docker.bat` (Windows) or `bash start-docker.sh` (Linux/macOS)
-3. Start Flutter app
-4. Register a doctor account
-5. Add patients and test MRI analysis
+Core backend docs:
+- [backend/docs/DOCKER_SETUP.md](backend/docs/DOCKER_SETUP.md)
+- [backend/docs/DOCKER_COMMANDS.md](backend/docs/DOCKER_COMMANDS.md)
+- [backend/docs/DOCKER_QUICK_REFERENCE.md](backend/docs/DOCKER_QUICK_REFERENCE.md)
+- [backend/docs/API_DOCUMENTATION.md](backend/docs/API_DOCUMENTATION.md)
+- [backend/docs/INTEGRATION_GUIDE.md](backend/docs/INTEGRATION_GUIDE.md)
+- [backend/docs/COMPLETION_SUMMARY.md](backend/docs/COMPLETION_SUMMARY.md)
 
-## 📞 Need Help?
+Additional references:
+- [backend/README.md](backend/README.md)
+- [FIXES_SUMMARY.md](FIXES_SUMMARY.md)
 
-- **Quick start**: Read [backend/DOCKER_QUICK_REFERENCE.md](backend/DOCKER_QUICK_REFERENCE.md)
-- **Setup guide**: Read [backend/DOCKER_SETUP.md](backend/docs/DOCKER_SETUP.md)
-- **Commands**: Read [backend/DOCKER_COMMANDS.md](backend/docs/DOCKER_COMMANDS.md)
-- **Full system**: Read [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md)
+## Troubleshooting (macOS)
 
----
+### Docker is running but API is unreachable
 
-**Status:** ✅ Complete  
-**Version:** 1.0.0  
-**Last Updated:** January 28, 2026
+```bash
+cd backend
+docker-compose ps
+docker-compose logs -f
+```
+
+Look for startup errors, then restart:
+
+```bash
+docker-compose down
+docker-compose up -d --build
+```
+
+### Flutter toolchain issues
+
+```bash
+flutter doctor
+```
+
+Resolve reported issues, then retry:
+
+```bash
+cd frontend
+flutter clean
+flutter pub get
+flutter run
+```
+
+### Port conflicts
+
+If ports 8000 or 5432 are busy, stop conflicting services or update port mappings in [backend/docker-compose.yml](backend/docker-compose.yml).
+
+## Production Notes
+
+- Use secure, environment-specific secrets in backend .env
+- Restrict CORS and allowed hosts
+- Add monitoring, backups, and log aggregation
+- Use managed PostgreSQL or hardened container deployment
+
+## Status
+
+- Version: 1.0.0
+- Last updated: April 16, 2026
